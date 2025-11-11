@@ -152,3 +152,13 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(len(data), 5)
         self.assertEqual(data[0]["name"], accounts[0].name)
+
+    def test_update_account(self):
+        account = self._create_accounts(5)[0]
+        updated_account = account.serialize()
+        response = self.client.patch(
+            f"{BASE_URL}/{account.id}",
+            json=updated_account,
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
