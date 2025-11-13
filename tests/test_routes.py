@@ -90,9 +90,7 @@ class TestAccountService(TestCase):
         """It should Create a new Account"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="application/json"
+            BASE_URL, json=account.serialize(), content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -117,9 +115,7 @@ class TestAccountService(TestCase):
         """It should not Create an Account when sending the wrong media type"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="test/html"
+            BASE_URL, json=account.serialize(), content_type="test/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
@@ -127,8 +123,7 @@ class TestAccountService(TestCase):
         """It should read an account"""
         account = self._create_accounts(1)[0]
         response = self.client.get(
-            f"{BASE_URL}/{account.id}",
-            content_type="application/json"
+            f"{BASE_URL}/{account.id}", content_type="application/json"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -143,10 +138,7 @@ class TestAccountService(TestCase):
     def test_list_accounts(self):
         """It should list all accounts"""
         accounts = self._create_accounts(5)
-        response = self.client.get(
-            BASE_URL,
-            content_type="application/json"
-        )
+        response = self.client.get(BASE_URL, content_type="application/json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
@@ -160,7 +152,7 @@ class TestAccountService(TestCase):
         response = self.client.patch(
             f"{BASE_URL}/{account.id}",
             json=updated_account,
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
@@ -172,16 +164,10 @@ class TestAccountService(TestCase):
     def test_delete_account(self):
         """It delete an account"""
         account = self._create_accounts(1)[0]
-        updated_account = account.serialize()
-        response = self.client.delete(
-            f"{BASE_URL}/{account.id}"
-        )
+        response = self.client.delete(f"{BASE_URL}/{account.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_account_not_found(self):
         """It should not delete an Account that is not found"""
         resp = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
-
-    
